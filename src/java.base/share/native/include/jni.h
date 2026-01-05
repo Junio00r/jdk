@@ -56,109 +56,107 @@ extern "C" {
 
 #ifndef JNI_TYPES_ALREADY_DEFINED_IN_JNI_MD_H
 
-typedef unsigned char   jboolean;
-typedef unsigned short  jchar;
-typedef short           jshort;
-typedef float           jfloat;
-typedef double          jdouble;
+  /* primitives types */
+  typedef unsigned char   jboolean;
+  typedef unsigned short  jchar;
+  typedef short           jshort;
+  typedef float           jfloat;
+  typedef double          jdouble;
 
-typedef jint            jsize;
+  typedef jint            jsize;
 
-#ifdef __cplusplus
+  #ifdef __cplusplus
 
-class _jobject {};
-class _jclass : public _jobject {};
-class _jthrowable : public _jobject {};
-class _jstring : public _jobject {};
-class _jarray : public _jobject {};
-class _jbooleanArray : public _jarray {};
-class _jbyteArray : public _jarray {};
-class _jcharArray : public _jarray {};
-class _jshortArray : public _jarray {};
-class _jintArray : public _jarray {};
-class _jlongArray : public _jarray {};
-class _jfloatArray : public _jarray {};
-class _jdoubleArray : public _jarray {};
-class _jobjectArray : public _jarray {};
+    class _jobject {};
+    class _jclass : public _jobject {};
+    class _jthrowable : public _jobject {};
+    class _jstring : public _jobject {};
+    class _jarray : public _jobject {};
+    class _jbooleanArray : public _jarray {};
+    class _jbyteArray : public _jarray {};
+    class _jcharArray : public _jarray {};
+    class _jshortArray : public _jarray {};
+    class _jintArray : public _jarray {};
+    class _jlongArray : public _jarray {};
+    class _jfloatArray : public _jarray {};
+    class _jdoubleArray : public _jarray {};
+    class _jobjectArray : public _jarray {};
 
-typedef _jobject *jobject;
-typedef _jclass *jclass;
-typedef _jthrowable *jthrowable;
-typedef _jstring *jstring;
-typedef _jarray *jarray;
-typedef _jbooleanArray *jbooleanArray;
-typedef _jbyteArray *jbyteArray;
-typedef _jcharArray *jcharArray;
-typedef _jshortArray *jshortArray;
-typedef _jintArray *jintArray;
-typedef _jlongArray *jlongArray;
-typedef _jfloatArray *jfloatArray;
-typedef _jdoubleArray *jdoubleArray;
-typedef _jobjectArray *jobjectArray;
+    typedef _jobject *jobject;
+    typedef _jclass *jclass;
+    typedef _jthrowable *jthrowable;
+    typedef _jstring *jstring;
+    typedef _jarray *jarray;
+    typedef _jbooleanArray *jbooleanArray;
+    typedef _jbyteArray *jbyteArray;
+    typedef _jcharArray *jcharArray;
+    typedef _jshortArray *jshortArray;
+    typedef _jintArray *jintArray;
+    typedef _jlongArray *jlongArray;
+    typedef _jfloatArray *jfloatArray;
+    typedef _jdoubleArray *jdoubleArray;
+    typedef _jobjectArray *jobjectArray;
 
-#else
+  #else 
 
-struct _jobject;
+    struct _jobject;
 
-typedef struct _jobject *jobject;
-typedef jobject jclass;
-typedef jobject jthrowable;
-typedef jobject jstring;
-typedef jobject jarray;
-typedef jarray jbooleanArray;
-typedef jarray jbyteArray;
-typedef jarray jcharArray;
-typedef jarray jshortArray;
-typedef jarray jintArray;
-typedef jarray jlongArray;
-typedef jarray jfloatArray;
-typedef jarray jdoubleArray;
-typedef jarray jobjectArray;
+    typedef struct _jobject *jobject;
+    typedef jobject jclass;
+    typedef jobject jthrowable;
+    typedef jobject jstring;
+    typedef jobject jarray;
+    typedef jarray jbooleanArray;
+    typedef jarray jbyteArray;
+    typedef jarray jcharArray;
+    typedef jarray jshortArray;
+    typedef jarray jintArray;
+    typedef jarray jlongArray;
+    typedef jarray jfloatArray;
+    typedef jarray jdoubleArray;
+    typedef jarray jobjectArray;
 
-#endif
+  #endif /* end of definition C or C++ types */
 
-typedef jobject jweak;
+  typedef jobject jweak;
 
-typedef union jvalue {
-    jboolean z;
-    jbyte    b;
-    jchar    c;
-    jshort   s;
-    jint     i;
-    jlong    j;
-    jfloat   f;
-    jdouble  d;
-    jobject  l;
-} jvalue;
+  typedef union jvalue {
+      jboolean z;
+      jbyte    b;
+      jchar    c;
+      jshort   s;
+      jint     i;
+      jlong    j;
+      jfloat   f;
+      jdouble  d;
+      jobject  l;
+  } jvalue;
 
-struct _jfieldID;
-typedef struct _jfieldID *jfieldID;
+  /* Return values from jobjectRefType */
+  typedef enum _jobjectType {
+      JNIInvalidRefType    = 0,
+      JNILocalRefType      = 1,
+      JNIGlobalRefType     = 2,
+      JNIWeakGlobalRefType = 3
+  } jobjectRefType;
 
-struct _jmethodID;
-typedef struct _jmethodID *jmethodID;
+  struct _jfieldID;
+  typedef struct _jfieldID *jfieldID;
 
-/* Return values from jobjectRefType */
-typedef enum _jobjectType {
-     JNIInvalidRefType    = 0,
-     JNILocalRefType      = 1,
-     JNIGlobalRefType     = 2,
-     JNIWeakGlobalRefType = 3
-} jobjectRefType;
-
+  struct _jmethodID;
+  typedef struct _jmethodID *jmethodID;
 
 #endif /* JNI_TYPES_ALREADY_DEFINED_IN_JNI_MD_H */
 
 /*
  * jboolean constants
  */
-
 #define JNI_FALSE 0
 #define JNI_TRUE 1
 
 /*
  * possible return values for JNI functions.
  */
-
 #define JNI_OK           0                 /* success */
 #define JNI_ERR          (-1)              /* unknown error */
 #define JNI_EDETACHED    (-2)              /* thread detached from the VM */
@@ -170,12 +168,11 @@ typedef enum _jobjectType {
 /*
  * used in ReleaseScalarArrayElements
  */
-
 #define JNI_COMMIT 1
 #define JNI_ABORT 2
 
 /*
- * used in RegisterNatives to describe native method name, signature,
+ * used in RegisterNatives function to describe native method name, signature,
  * and function pointer.
  */
 
@@ -185,33 +182,20 @@ typedef struct {
     void *fnPtr;
 } JNINativeMethod;
 
+
+// ==========================================
 /*
  * JNI Native Method Interface.
  */
-
 struct JNINativeInterface_;
-
 struct JNIEnv_;
 
 #ifdef __cplusplus
-typedef JNIEnv_ JNIEnv;
+  typedef JNIEnv_ JNIEnv;
 #else
-typedef const struct JNINativeInterface_ *JNIEnv;
+  typedef const struct JNINativeInterface_ *JNIEnv;
 #endif
 
-/*
- * JNI Invocation Interface.
- */
-
-struct JNIInvokeInterface_;
-
-struct JavaVM_;
-
-#ifdef __cplusplus
-typedef JavaVM_ JavaVM;
-#else
-typedef const struct JNIInvokeInterface_ *JavaVM;
-#endif
 
 struct JNINativeInterface_ {
     void *reserved0;
@@ -798,8 +782,10 @@ struct JNINativeInterface_ {
  */
 
 struct JNIEnv_ {
-    const struct JNINativeInterface_ *functions;
-#ifdef __cplusplus
+
+  const struct JNINativeInterface_ *functions;
+
+  #ifdef __cplusplus
 
     jint GetVersion() {
         return functions->GetVersion(this);
@@ -1890,8 +1876,82 @@ struct JNIEnv_ {
         return functions->IsVirtualThread(this, obj);
     }
 
-#endif /* __cplusplus */
+  #endif /* __cplusplus */
+
 };
+
+
+// ==========================================
+/*
+ * JNI Invocation Interface.
+ */
+struct JNIInvokeInterface_;
+struct JavaVM_;
+
+#ifdef __cplusplus
+  typedef JavaVM_ JavaVM;
+#else
+  typedef const struct JNIInvokeInterface_ *JavaVM;
+#endif
+
+struct JNIInvokeInterface_ {
+    void *reserved0;
+    void *reserved1;
+    void *reserved2;
+
+    jint (JNICALL *DestroyJavaVM)(JavaVM *vm);
+
+    jint (JNICALL *AttachCurrentThread)(JavaVM *vm, void **penv, void *args);
+
+    jint (JNICALL *DetachCurrentThread)(JavaVM *vm);
+
+    jint (JNICALL *GetEnv)(JavaVM *vm, void **penv, jint version);
+
+    jint (JNICALL *AttachCurrentThreadAsDaemon)(JavaVM *vm, void **penv, void *args);
+};
+struct JavaVM_ {
+    const struct JNIInvokeInterface_ *functions;
+  #ifdef __cplusplus
+
+    jint DestroyJavaVM() {
+        return functions->DestroyJavaVM(this);
+    }
+    jint AttachCurrentThread(void **penv, void *args) {
+        return functions->AttachCurrentThread(this, penv, args);
+    }
+    jint DetachCurrentThread() {
+        return functions->DetachCurrentThread(this);
+    }
+
+    jint GetEnv(void **penv, jint version) {
+        return functions->GetEnv(this, penv, version);
+    }
+    jint AttachCurrentThreadAsDaemon(void **penv, void *args) {
+        return functions->AttachCurrentThreadAsDaemon(this, penv, args);
+    }
+  #endif
+};
+
+#ifdef _JNI_IMPLEMENTATION_
+  #define _JNI_IMPORT_OR_EXPORT_ JNIEXPORT
+#else
+  #define _JNI_IMPORT_OR_EXPORT_ JNIIMPORT
+#endif
+_JNI_IMPORT_OR_EXPORT_ jint JNICALL
+JNI_GetDefaultJavaVMInitArgs(void *args);
+
+_JNI_IMPORT_OR_EXPORT_ jint JNICALL
+JNI_CreateJavaVM(JavaVM **pvm, void **penv, void *args);
+
+_JNI_IMPORT_OR_EXPORT_ jint JNICALL
+JNI_GetCreatedJavaVMs(JavaVM **, jsize, jsize *);
+
+/* Defined by native libraries. */
+JNIEXPORT jint JNICALL
+JNI_OnLoad(JavaVM *vm, void *reserved);
+
+JNIEXPORT void JNICALL
+JNI_OnUnload(JavaVM *vm, void *reserved);
 
 /*
  * optionString may be any option accepted by the JVM, or one of the
@@ -1928,71 +1988,10 @@ typedef struct JavaVMAttachArgs {
 } JavaVMAttachArgs;
 
 /* These will be VM-specific. */
-
 #define JDK1_2
 #define JDK1_4
 
 /* End VM-specific. */
-
-struct JNIInvokeInterface_ {
-    void *reserved0;
-    void *reserved1;
-    void *reserved2;
-
-    jint (JNICALL *DestroyJavaVM)(JavaVM *vm);
-
-    jint (JNICALL *AttachCurrentThread)(JavaVM *vm, void **penv, void *args);
-
-    jint (JNICALL *DetachCurrentThread)(JavaVM *vm);
-
-    jint (JNICALL *GetEnv)(JavaVM *vm, void **penv, jint version);
-
-    jint (JNICALL *AttachCurrentThreadAsDaemon)(JavaVM *vm, void **penv, void *args);
-};
-
-struct JavaVM_ {
-    const struct JNIInvokeInterface_ *functions;
-#ifdef __cplusplus
-
-    jint DestroyJavaVM() {
-        return functions->DestroyJavaVM(this);
-    }
-    jint AttachCurrentThread(void **penv, void *args) {
-        return functions->AttachCurrentThread(this, penv, args);
-    }
-    jint DetachCurrentThread() {
-        return functions->DetachCurrentThread(this);
-    }
-
-    jint GetEnv(void **penv, jint version) {
-        return functions->GetEnv(this, penv, version);
-    }
-    jint AttachCurrentThreadAsDaemon(void **penv, void *args) {
-        return functions->AttachCurrentThreadAsDaemon(this, penv, args);
-    }
-#endif
-};
-
-#ifdef _JNI_IMPLEMENTATION_
-#define _JNI_IMPORT_OR_EXPORT_ JNIEXPORT
-#else
-#define _JNI_IMPORT_OR_EXPORT_ JNIIMPORT
-#endif
-_JNI_IMPORT_OR_EXPORT_ jint JNICALL
-JNI_GetDefaultJavaVMInitArgs(void *args);
-
-_JNI_IMPORT_OR_EXPORT_ jint JNICALL
-JNI_CreateJavaVM(JavaVM **pvm, void **penv, void *args);
-
-_JNI_IMPORT_OR_EXPORT_ jint JNICALL
-JNI_GetCreatedJavaVMs(JavaVM **, jsize, jsize *);
-
-/* Defined by native libraries. */
-JNIEXPORT jint JNICALL
-JNI_OnLoad(JavaVM *vm, void *reserved);
-
-JNIEXPORT void JNICALL
-JNI_OnUnload(JavaVM *vm, void *reserved);
 
 #define JNI_VERSION_1_1 0x00010001
 #define JNI_VERSION_1_2 0x00010002
