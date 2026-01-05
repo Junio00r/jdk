@@ -1,3 +1,14 @@
+# Hi there
+
+This my a case of study of JDK and some components.
+
+Some code in specific code can be of a different order in some
+comments modified just for better understanding.
+
+# Components of Study
+
+Java Native Interface - [[Specification]](https://docs.oracle.com/en/java/javase/25/docs/specs/jni)
+
 # Welcome to the JDK!
 
 For build instructions please see the

@@ -34,7 +34,7 @@
  *****************************************************************************/
 
 #ifndef _JAVASOFT_JNI_H_
-#define _JAVASOFT_JNI_H_
+  #define _JAVASOFT_JNI_H_
 
 #include <stdio.h>
 #include <stdarg.h>
@@ -45,7 +45,7 @@
 #include "jni_md.h"
 
 #ifdef __cplusplus
-extern "C" {
+  extern "C" {
 #endif
 
 #define JNICALL
@@ -53,6 +53,10 @@ extern "C" {
 /*
  * JNI Types
  */
+
+// jboolean constants
+#define JNI_FALSE 0
+#define JNI_TRUE 1
 
 #ifndef JNI_TYPES_ALREADY_DEFINED_IN_JNI_MD_H
 
@@ -118,64 +122,39 @@ extern "C" {
 
   #endif /* end of definition C or C++ types */
 
-  typedef jobject jweak;
+typedef jobject jweak;
 
-  typedef union jvalue {
-      jboolean z;
-      jbyte    b;
-      jchar    c;
-      jshort   s;
-      jint     i;
-      jlong    j;
-      jfloat   f;
-      jdouble  d;
-      jobject  l;
-  } jvalue;
+typedef union jvalue {
+    jboolean z;
+    jbyte    b;
+    jchar    c;
+    jshort   s;
+    jint     i;
+    jlong    j;
+    jfloat   f;
+    jdouble  d;
+  jobject  l;
+} jvalue;
 
-  /* Return values from jobjectRefType */
-  typedef enum _jobjectType {
-      JNIInvalidRefType    = 0,
-      JNILocalRefType      = 1,
-      JNIGlobalRefType     = 2,
-      JNIWeakGlobalRefType = 3
-  } jobjectRefType;
+/* Return values from jobjectReferenceType */
+typedef enum _jobjectType {
+    JNIInvalidRefType    = 0,
+    JNILocalRefType      = 1,
+    JNIGlobalRefType     = 2,
+    JNIWeakGlobalRefType = 3
+} jobjectRefType;
 
-  struct _jfieldID;
-  typedef struct _jfieldID *jfieldID;
-
-  struct _jmethodID;
-  typedef struct _jmethodID *jmethodID;
+struct _jfieldID;
+typedef struct _jfieldID *jfieldID;
+struct _jmethodID;
+typedef struct _jmethodID *JNI_ENTRY;
 
 #endif /* JNI_TYPES_ALREADY_DEFINED_IN_JNI_MD_H */
-
-/*
- * jboolean constants
- */
-#define JNI_FALSE 0
-#define JNI_TRUE 1
-
-/*
- * possible return values for JNI functions.
- */
-#define JNI_OK           0                 /* success */
-#define JNI_ERR          (-1)              /* unknown error */
-#define JNI_EDETACHED    (-2)              /* thread detached from the VM */
-#define JNI_EVERSION     (-3)              /* JNI version error */
-#define JNI_ENOMEM       (-4)              /* not enough memory */
-#define JNI_EEXIST       (-5)              /* VM already created */
-#define JNI_EINVAL       (-6)              /* invalid arguments */
-
-/*
- * used in ReleaseScalarArrayElements
- */
-#define JNI_COMMIT 1
-#define JNI_ABORT 2
 
 /*
  * used in RegisterNatives function to describe native method name, signature,
  * and function pointer.
  */
-
 typedef struct {
     char *name;
     char *signature;
@@ -201,8 +180,8 @@ struct JNINativeInterface_ {
     void *reserved0;
     void *reserved1;
     void *reserved2;
-
     void *reserved3;
+
     jint (JNICALL *GetVersion)(JNIEnv *env);
 
     jclass (JNICALL *DefineClass)
@@ -704,8 +683,7 @@ struct JNINativeInterface_ {
       (JNIEnv *env, jdoubleArray array, jsize start, jsize len, const jdouble *buf);
 
     jint (JNICALL *RegisterNatives)
-      (JNIEnv *env, jclass clazz, const JNINativeMethod *methods,
-       jint nMethods);
+      (JNIEnv *env, jclass clazz, const JNINativeMethod *methods, jint nMethods);
     jint (JNICALL *UnregisterNatives)
       (JNIEnv *env, jclass clazz);
 
@@ -774,13 +752,11 @@ struct JNINativeInterface_ {
  *
  *    env->FindClass("java/lang/String")
  *
- * in C++ rather than:
+ * rather than:
  *
- *    (*env)->FindClass(env, "java/lang/String")
+ *    (*env)->FindClass(env, "java/lang/String") in C.
  *
- * in C.
  */
-
 struct JNIEnv_ {
 
   const struct JNINativeInterface_ *functions;
@@ -790,8 +766,7 @@ struct JNIEnv_ {
     jint GetVersion() {
         return functions->GetVersion(this);
     }
-    jclass DefineClass(const char *name, jobject loader, const jbyte *buf,
-                       jsize len) {
+    jclass DefineClass(const char *name, jobject loader, const jbyte *buf, jsize len) {
         return functions->DefineClass(this, name, loader, buf, len);
     }
     jclass FindClass(const char *name) {
@@ -1800,8 +1775,7 @@ struct JNIEnv_ {
         functions->SetDoubleArrayRegion(this,array,start,len,buf);
     }
 
-    jint RegisterNatives(jclass clazz, const JNINativeMethod *methods,
-                         jint nMethods) {
+    jint RegisterNatives(jclass clazz, const JNINativeMethod *methods, jint nMethods) {
         return functions->RegisterNatives(this,clazz,methods,nMethods);
     }
     jint UnregisterNatives(jclass clazz) {
@@ -1953,6 +1927,12 @@ JNI_OnLoad(JavaVM *vm, void *reserved);
 JNIEXPORT void JNICALL
 JNI_OnUnload(JavaVM *vm, void *reserved);
 
+
+/* 
+ * Utils
+ * ============================================================================
+ */
+
 /*
  * optionString may be any option accepted by the JVM, or one of the
  * following:
@@ -1990,8 +1970,24 @@ typedef struct JavaVMAttachArgs {
 /* These will be VM-specific. */
 #define JDK1_2
 #define JDK1_4
-
 /* End VM-specific. */
+
+/*
+ * used in ReleaseScalarArrayElements
+ */
+#define JNI_COMMIT 1
+#define JNI_ABORT 2
+
+/*
+ * possible return values for JNI functions.
+ */
+#define JNI_OK           0                 /* success */
+#define JNI_ERR          (-1)              /* unknown error */
+#define JNI_EDETACHED    (-2)              /* thread detached from the VM */
+#define JNI_EVERSION     (-3)              /* JNI version error */
+#define JNI_ENOMEM       (-4)              /* not enough memory */
+#define JNI_EEXIST       (-5)              /* VM already created */
+#define JNI_EINVAL       (-6)              /* invalid arguments */
 
 #define JNI_VERSION_1_1 0x00010001
 #define JNI_VERSION_1_2 0x00010002
