@@ -746,7 +746,6 @@ struct JNINativeInterface_ {
       (JNIEnv *env, jstring str);
 
 };
-
 /*
  * We use inlined functions for C++ so that programmers can write:
  *
@@ -1855,7 +1854,7 @@ struct JNIEnv_ {
 };
 
 
-// ==========================================
+// ===============================================================
 /*
  * JNI Invocation Interface.
  */
@@ -1885,25 +1884,26 @@ struct JNIInvokeInterface_ {
 };
 struct JavaVM_ {
     const struct JNIInvokeInterface_ *functions;
-  #ifdef __cplusplus
 
-    jint DestroyJavaVM() {
-        return functions->DestroyJavaVM(this);
-    }
-    jint AttachCurrentThread(void **penv, void *args) {
-        return functions->AttachCurrentThread(this, penv, args);
-    }
-    jint DetachCurrentThread() {
-        return functions->DetachCurrentThread(this);
-    }
+    #ifdef __cplusplus
 
-    jint GetEnv(void **penv, jint version) {
-        return functions->GetEnv(this, penv, version);
-    }
-    jint AttachCurrentThreadAsDaemon(void **penv, void *args) {
-        return functions->AttachCurrentThreadAsDaemon(this, penv, args);
-    }
-  #endif
+      jint DestroyJavaVM() {
+          return functions->DestroyJavaVM(this);
+      }
+      jint AttachCurrentThread(void **penv, void *args) {
+          return functions->AttachCurrentThread(this, penv, args);
+      }
+      jint DetachCurrentThread() {
+          return functions->DetachCurrentThread(this);
+      }
+
+      jint GetEnv(void **penv, jint version) {
+          return functions->GetEnv(this, penv, version);
+      }
+      jint AttachCurrentThreadAsDaemon(void **penv, void *args) {
+          return functions->AttachCurrentThreadAsDaemon(this, penv, args);
+      }
+    #endif
 };
 
 #ifdef _JNI_IMPLEMENTATION_
