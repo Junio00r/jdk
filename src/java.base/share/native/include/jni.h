@@ -166,15 +166,24 @@ typedef struct {
 /*
  * JNI Native Method Interface.
  */
-struct JNINativeInterface_;
-struct JNIEnv_;
+struct JNINativeInterface_; // used for C reference type
+struct JNIEnv_; // use for C++ reference type
 
+/*
+ * We use inlined functions for C++ so that programmers can write:
+ *
+ *    env->FindClass("java/lang/String")
+ *
+ * rather than:
+ *
+ *    (*env)->FindClass(env, "java/lang/String") in C.
+ *
+ */
 #ifdef __cplusplus
   typedef JNIEnv_ JNIEnv;
 #else
   typedef const struct JNINativeInterface_ *JNIEnv;
 #endif
-
 
 struct JNINativeInterface_ {
     void *reserved0;
@@ -746,16 +755,6 @@ struct JNINativeInterface_ {
       (JNIEnv *env, jstring str);
 
 };
-/*
- * We use inlined functions for C++ so that programmers can write:
- *
- *    env->FindClass("java/lang/String")
- *
- * rather than:
- *
- *    (*env)->FindClass(env, "java/lang/String") in C.
- *
- */
 struct JNIEnv_ {
 
   const struct JNINativeInterface_ *functions;

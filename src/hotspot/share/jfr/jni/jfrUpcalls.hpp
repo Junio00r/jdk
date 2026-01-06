@@ -36,11 +36,10 @@ class JfrTracedMethod;
 class JavaThread;
 template <typename E> class GrowableArray;
 
-//
 // Upcalls to Java for instrumentation purposes.
 // Targets are located in jdk.jfr.internal.JVMUpcalls.
-//
 class JfrUpcalls : AllStatic {
+
  public:
   static void new_bytes_eager_instrumentation(jlong trace_id,
                                               jboolean force_instrumentation,
@@ -60,13 +59,13 @@ class JfrUpcalls : AllStatic {
                              unsigned char** new_class_data,
                              TRAPS);
 
-  // Caller needs ResourceMark
+  
+                             // Caller needs ResourceMark
   static ClassFileStream* on_method_trace(InstanceKlass* ik, const ClassFileStream* stream,
                                           GrowableArray<JfrTracedMethod>* methods,
                                           TRAPS);
 
   static void publish_method_timers_for_klass(traceid klass_id, TRAPS);
-
   static bool unhide_internal_types(TRAPS);
 };
 
