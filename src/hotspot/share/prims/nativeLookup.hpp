@@ -32,21 +32,23 @@
 // Java native functions.
 
 class NativeLookup : AllStatic {
- private:
-  // Style specific lookup
-  static address lookup_style(const methodHandle& method, char* pure_name, const char* long_name, int args_size, TRAPS);
-  static address lookup_base (const methodHandle& method, TRAPS);
-  static address lookup_entry(const methodHandle& method, TRAPS);
-  static address lookup_entry_prefixed(const methodHandle& method, TRAPS);
+  
+  private:
+    // Style specific lookup
+    static address lookup_style(const methodHandle& method, char* pure_name, const char* long_name, int args_size, TRAPS);
+    static address lookup_base (const methodHandle& method, TRAPS);
+    static address lookup_entry(const methodHandle& method, TRAPS);
+    static address lookup_entry_prefixed(const methodHandle& method, TRAPS);
 
   static const char* compute_complete_jni_name(const char* pure_name, const char* long_name, int args_size);
- public:
-  // JNI name computation
-  static char* pure_jni_name(const methodHandle& method);
-  static char* long_jni_name(const methodHandle& method);
+  
+  public:
+    // JNI name computation
+    static char* pure_jni_name(const methodHandle& method);
+    static char* long_jni_name(const methodHandle& method);
 
-  // Lookup native function. May throw UnsatisfiedLinkError.
-  static address lookup(const methodHandle& method, TRAPS);
+    // Lookup native function. May throw UnsatisfiedLinkError.
+    static address lookup(const methodHandle& method, TRAPS);
 };
 
 #endif // SHARE_PRIMS_NATIVELOOKUP_HPP

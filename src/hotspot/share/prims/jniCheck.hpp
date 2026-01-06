@@ -43,7 +43,6 @@ extern "C" {
 //
 // Checked JNI routines that are useful for outside of checked JNI
 //
-
 class jniCheck : public AllStatic {
  public:
   static oop validate_handle(JavaThread* thr, jobject obj);

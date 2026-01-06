@@ -35,8 +35,6 @@
 /*
  *      Implementation of class jdk.internal.perf.Perf
  */
-
-
 #define PERF_ENTRY(result_type, header) \
   JVM_ENTRY(result_type, header)
 

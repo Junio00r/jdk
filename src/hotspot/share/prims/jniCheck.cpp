@@ -335,7 +335,8 @@ check_is_array(JavaThread* thr, jarray jArray)
 }
 
 static inline arrayOop
-check_is_primitive_array(JavaThread* thr, jarray jArray) {
+check_is_primitive_array(JavaThread* thr, jarray jArray) 
+{
   arrayOop aOop = check_is_array(thr, jArray);
 
   if (!aOop->is_typeArray()) {
@@ -358,7 +359,8 @@ check_primitive_array_type(JavaThread* thr, jarray jArray, BasicType elementType
 }
 
 static inline void
-check_is_obj_array(JavaThread* thr, jarray jArray) {
+check_is_obj_array(JavaThread* thr, jarray jArray) 
+{
   arrayOop aOop = check_is_array(thr, jArray);
   if (!aOop->is_objArray()) {
     ReportJNIFatalError(thr, fatal_object_array_expected);
@@ -379,7 +381,8 @@ const void* CRITICAL_TAG = (void*)0x49134913;
  * Remember the original elements (GuardedMemory::get_tag())
  */
 static void* check_jni_wrap_copy_array(JavaThread* thr, jarray array,
-                                       void* orig_elements, jboolean is_critical = JNI_FALSE) {
+                                       void* orig_elements, jboolean is_critical = JNI_FALSE) 
+ {
   void* result;
   IN_VM(
     oop a = JNIHandles::resolve_non_null(array);

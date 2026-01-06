@@ -207,11 +207,11 @@ extern "C" {
   void JNICALL JVM_RegisterPerfMethods(JNIEnv *env, jclass perfclass);
   void JNICALL JVM_RegisterWhiteBoxMethods(JNIEnv *env, jclass wbclass);
   void JNICALL JVM_RegisterVectorSupportMethods(JNIEnv *env, jclass vsclass);
-#if INCLUDE_JVMCI
-  jobject  JNICALL JVM_GetJVMCIRuntime(JNIEnv *env, jclass c);
-  jlong    JNICALL JVM_ReadSystemPropertiesInfo(JNIEnv *env, jclass c, jintArray offsets);
-  void     JNICALL JVM_RegisterJVMCINatives(JNIEnv *env, jclass compilerToVMClass);
-#endif
+  #if INCLUDE_JVMCI
+    jobject  JNICALL JVM_GetJVMCIRuntime(JNIEnv *env, jclass c);
+    jlong    JNICALL JVM_ReadSystemPropertiesInfo(JNIEnv *env, jclass c, jintArray offsets);
+    void     JNICALL JVM_RegisterJVMCINatives(JNIEnv *env, jclass compilerToVMClass);
+  #endif
 }
 
 #define CC (char*)  /* cast a literal from (const char*) */
@@ -227,14 +227,14 @@ static JNINativeMethod lookup_special_native_methods[] = {
   { CC"Java_sun_hotspot_WhiteBox_registerNatives",                 nullptr, FN_PTR(JVM_RegisterWhiteBoxMethods)     },
   { CC"Java_jdk_test_whitebox_WhiteBox_registerNatives",           nullptr, FN_PTR(JVM_RegisterWhiteBoxMethods)     },
   { CC"Java_jdk_internal_vm_vector_VectorSupport_registerNatives", nullptr, FN_PTR(JVM_RegisterVectorSupportMethods)},
-#if INCLUDE_JVMCI
-  { CC"Java_jdk_vm_ci_runtime_JVMCI_initializeRuntime",            nullptr, FN_PTR(JVM_GetJVMCIRuntime)             },
-  { CC"Java_jdk_vm_ci_services_Services_readSystemPropertiesInfo", nullptr, FN_PTR(JVM_ReadSystemPropertiesInfo)    },
-  { CC"Java_jdk_vm_ci_hotspot_CompilerToVM_registerNatives",       nullptr, FN_PTR(JVM_RegisterJVMCINatives)        },
-#endif
-#if INCLUDE_JFR
-  { CC"Java_jdk_jfr_internal_JVM_registerNatives",                 nullptr, FN_PTR(jfr_register_natives)            },
-#endif
+  #if INCLUDE_JVMCI
+    { CC"Java_jdk_vm_ci_runtime_JVMCI_initializeRuntime",            nullptr, FN_PTR(JVM_GetJVMCIRuntime)             },
+    { CC"Java_jdk_vm_ci_services_Services_readSystemPropertiesInfo", nullptr, FN_PTR(JVM_ReadSystemPropertiesInfo)    },
+    { CC"Java_jdk_vm_ci_hotspot_CompilerToVM_registerNatives",       nullptr, FN_PTR(JVM_RegisterJVMCINatives)        },
+  #endif
+  #if INCLUDE_JFR
+    { CC"Java_jdk_jfr_internal_JVM_registerNatives",                 nullptr, FN_PTR(jfr_register_natives)            },
+  #endif
   { CC"Java_jdk_internal_misc_ScopedMemoryAccess_registerNatives", nullptr, FN_PTR(JVM_RegisterJDKInternalMiscScopedMemoryAccessMethods) },
 };
 
@@ -353,38 +353,38 @@ address NativeLookup::lookup_entry(const methodHandle& method, TRAPS) {
 // native implementation again.
 // See SetNativeMethodPrefix in the JVM TI Spec for more details.
 address NativeLookup::lookup_entry_prefixed(const methodHandle& method, TRAPS) {
-#if INCLUDE_JVMTI
-  ResourceMark rm(THREAD);
+  #if INCLUDE_JVMTI
+    ResourceMark rm(THREAD);
 
-  int prefix_count;
-  char** prefixes = JvmtiExport::get_all_native_method_prefixes(&prefix_count);
-  char* in_name = method->name()->as_C_string();
-  char* wrapper_name = in_name;
-  // last applied prefix will be first -- go backwards
-  for (int i = prefix_count-1; i >= 0; i--) {
-    char* prefix = prefixes[i];
-    size_t prefix_len = strlen(prefix);
-    if (strncmp(prefix, wrapper_name, prefix_len) == 0) {
-      // has this prefix remove it
-      wrapper_name += prefix_len;
-    }
-  }
-  if (wrapper_name != in_name) {
-    // we have a name for a wrapping method
-    int wrapper_name_len = (int)strlen(wrapper_name);
-    TempNewSymbol wrapper_symbol = SymbolTable::probe(wrapper_name, wrapper_name_len);
-    if (wrapper_symbol != nullptr) {
-      Klass* k = method->method_holder();
-      Method* wrapper_method = k->lookup_method(wrapper_symbol, method->signature());
-      if (wrapper_method != nullptr && !wrapper_method->is_native()) {
-        // we found a wrapper method, use its native entry
-        method->set_is_prefixed_native();
-        return lookup_entry(methodHandle(THREAD, wrapper_method), THREAD);
+    int prefix_count;
+    char** prefixes = JvmtiExport::get_all_native_method_prefixes(&prefix_count);
+    char* in_name = method->name()->as_C_string();
+    char* wrapper_name = in_name;
+    // last applied prefix will be first -- go backwards
+    for (int i = prefix_count-1; i >= 0; i--) {
+      char* prefix = prefixes[i];
+      size_t prefix_len = strlen(prefix);
+      if (strncmp(prefix, wrapper_name, prefix_len) == 0) {
+        // has this prefix remove it
+        wrapper_name += prefix_len;
       }
     }
-  }
-#endif // INCLUDE_JVMTI
-  return nullptr;
+    if (wrapper_name != in_name) {
+      // we have a name for a wrapping method
+      int wrapper_name_len = (int)strlen(wrapper_name);
+      TempNewSymbol wrapper_symbol = SymbolTable::probe(wrapper_name, wrapper_name_len);
+      if (wrapper_symbol != nullptr) {
+        Klass* k = method->method_holder();
+        Method* wrapper_method = k->lookup_method(wrapper_symbol, method->signature());
+        if (wrapper_method != nullptr && !wrapper_method->is_native()) {
+          // we found a wrapper method, use its native entry
+          method->set_is_prefixed_native();
+          return lookup_entry(methodHandle(THREAD, wrapper_method), THREAD);
+        }
+      }
+    }
+  #endif // INCLUDE_JVMTI
+    return nullptr;
 }
 
 address NativeLookup::lookup_base(const methodHandle& method, TRAPS) {
