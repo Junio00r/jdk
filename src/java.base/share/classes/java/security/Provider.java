@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 1996, 2024, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 1996, 2025, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * This code is free software; you can redistribute it and/or modify it
@@ -827,7 +827,7 @@ public abstract class Provider extends Properties {
         return o;
     }
 
-    @SuppressWarnings("unchecked") // Function must actually operate over strings
+    // Function must actually operate over strings
     private void implReplaceAll(BiFunction<? super Object, ? super Object,
             ? extends Object> function) {
 
@@ -847,7 +847,7 @@ public abstract class Provider extends Properties {
         }
     }
 
-    @SuppressWarnings("unchecked") // Function must actually operate over strings
+    // Function must actually operate over strings
     private Object implMerge(Object key, Object value,
             BiFunction<? super Object, ? super Object, ? extends Object>
             remappingFunction) {
@@ -864,7 +864,7 @@ public abstract class Provider extends Properties {
         return o;
     }
 
-    @SuppressWarnings("unchecked") // Function must actually operate over strings
+    // Function must actually operate over strings
     private Object implCompute(Object key, BiFunction<? super Object,
             ? super Object, ? extends Object> remappingFunction) {
 
@@ -881,7 +881,7 @@ public abstract class Provider extends Properties {
         return o;
     }
 
-    @SuppressWarnings("unchecked") // Function must actually operate over strings
+    // Function must actually operate over strings
     private Object implComputeIfAbsent(Object key, Function<? super Object,
             ? extends Object> mappingFunction) {
         if (!checkLegacy(key)) return null;
@@ -893,7 +893,7 @@ public abstract class Provider extends Properties {
         return o;
     }
 
-    @SuppressWarnings("unchecked") // Function must actually operate over strings
+    // Function must actually operate over strings
     private Object implComputeIfPresent(Object key, BiFunction<? super Object,
             ? super Object, ? extends Object> remappingFunction) {
         if (!checkLegacy(key)) return null;
@@ -1147,6 +1147,7 @@ public abstract class Provider extends Properties {
             s = legacyMap.get(key);
             if (s != null && !s.isValid()) {
                 legacyMap.remove(key, s);
+                return null;
             }
         }
 
