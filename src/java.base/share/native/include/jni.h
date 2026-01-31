@@ -169,7 +169,12 @@ typedef struct {
 struct JNINativeInterface_; // used for C reference type
 struct JNIEnv_; // use for C++ reference type
 
-/*
+/* Conditioned code will be removed when the specific preprocessor runs.
+ * So, if the preprocessor of the C++ runs, only `typedef JNIEnv_ JNIEnv;`
+ * will be used and the another is removed. The conditional instruction is removed too.
+ * If the preprocessor of the C runs, only the `typedef const struct JNINativeInterface_ *JNIEnv;`
+ * is used;
+ *
  * We use inlined functions for C++ so that programmers can write:
  *
  *    env->FindClass("java/lang/String")
@@ -177,7 +182,6 @@ struct JNIEnv_; // use for C++ reference type
  * rather than:
  *
  *    (*env)->FindClass(env, "java/lang/String") in C.
- *
  */
 #ifdef __cplusplus
   typedef JNIEnv_ JNIEnv;
