@@ -1977,17 +1977,6 @@ typedef struct JavaVMAttachArgs {
     jobject group;
 } JavaVMAttachArgs;
 
-/* These will be VM-specific. */
-#define JDK1_2
-#define JDK1_4
-/* End VM-specific. */
-
-/*
- * used in ReleaseScalarArrayElements
- */
-#define JNI_COMMIT 1
-#define JNI_ABORT 2
-
 /*
  * possible return values for JNI functions.
  */
