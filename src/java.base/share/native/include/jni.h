@@ -144,6 +144,8 @@ typedef enum _jobjectType {
     JNIWeakGlobalRefType = 3
 } jobjectRefType;
 
+// Used to identify some members 
+// in the class (static class) or object (instance of the class)
 struct _jfieldID;
 typedef struct _jfieldID *jfieldID;
 struct _jmethodID;
@@ -189,17 +191,19 @@ struct JNIEnv_; // use for C++ reference type
   typedef const struct JNINativeInterface_ *JNIEnv;
 #endif
 
+// For C direct access 
 struct JNINativeInterface_ {
+    // MUST be always NULL for possible binary Compatibility
     void *reserved0;
     void *reserved1;
     void *reserved2;
     void *reserved3;
 
-    jint (JNICALL *GetVersion)(JNIEnv *env);
+    jint (JNICALL *GetVersion)
+      (JNIEnv *env);
 
     jclass (JNICALL *DefineClass)
-      (JNIEnv *env, const char *name, jobject loader, const jbyte *buf,
-       jsize len);
+      (JNIEnv *env, const char *name, jobject loader, const jbyte *buf,jsize len);
     jclass (JNICALL *FindClass)
       (JNIEnv *env, const char *name);
 
@@ -759,6 +763,7 @@ struct JNINativeInterface_ {
       (JNIEnv *env, jstring str);
 
 };
+// For C++ access using *functions
 struct JNIEnv_ {
 
   const struct JNINativeInterface_ *functions;
@@ -1870,6 +1875,7 @@ struct JavaVM_;
   typedef const struct JNIInvokeInterface_ *JavaVM;
 #endif
 
+// For C direct access 
 struct JNIInvokeInterface_ {
     void *reserved0;
     void *reserved1;
@@ -1885,6 +1891,7 @@ struct JNIInvokeInterface_ {
 
     jint (JNICALL *AttachCurrentThreadAsDaemon)(JavaVM *vm, void **penv, void *args);
 };
+// For C++ access using *functions
 struct JavaVM_ {
     const struct JNIInvokeInterface_ *functions;
 
